@@ -40,8 +40,8 @@ graph TD
     Prometheus —->|Query Data| Grafana
 
     %% User Traffic
-    User —->|HTTP request| Traefik
-    Traefik —->|Routes to monitor.bdc.hpcc.vn| Grafana
+    User —->|HTTP request to bdc.hpcc.vn/monitor| Gateway / Next.js
+    Gateway / Next.js —->|Proxies to bdc-grafana:3000/monitor| Grafana
 ```
 
 ---
@@ -54,7 +54,7 @@ graph TD
   - **Container Analytics**: Real-time resource usage (CPU, RAM, I/O) of all running containers via **cAdvisor**.
   - **Application Performance (APM)**: Direct scraping from Spring Boot Actuator endpoints (e.g., `auth-service`).
 - **Cross-Platform Bootstrapping**: Quick start shell script (`setup.sh`) and PowerShell script (`setup.ps1`) for downloading, repairing, and preparing community dashboards.
-- **Enterprise-Ready Routing**: Built-in labels for dynamic reverse proxy routing via **Traefik** under `monitor.bdc.hpcc.vn`.
+- **Subpath Routing Ready**: Pre-configured to run under the `/monitor` subpath (e.g. `bdc.hpcc.vn/monitor`) to seamlessly integrate with your main domain.
 - **Log Management**: Pre-configured JSON file log rotation policy limiting space consumption to max 30MB per container.
 
 ---
@@ -134,12 +134,29 @@ docker compose up -d
 
 Once deployed, you can access the tools through the following ports:
 
-| Service | Port (Internal) | Port (Host Default) | External Routing (Traefik) |
+| Service | Port (Internal) | Port (Host Default) | External Routing (Subpath) |
 | :--- | :--- | :--- | :--- |
-| **Grafana** | `3000` | `3010` | `monitor.bdc.hpcc.vn` |
+| **Grafana** | `3000` | `3010` | `bdc.hpcc.vn/monitor` (via Next.js/Reverse Proxy) |
 | **Prometheus** | `9090` | *Internal Only* | *N/A* |
 | **Node Exporter** | `9100` | *Internal Only* | *N/A* |
 | **cAdvisor** | `8080` | *Internal Only* | *N/A* |
+
+### Next.js Proxy Integration (Option 2 Setup)
+Since Grafana is configured to run under the `/monitor` subpath, you need to configure your Next.js application (`bdc-frontend`) to proxy these requests. Add the following block to your `next.config.js` file:
+
+```javascript
+module.exports = {
+  async rewrites() {
+    return [
+      {
+        source: '/monitor/:path*',
+        destination: 'http://bdc-grafana:3000/monitor/:path*',
+      },
+    ]
+  },
+}
+```
+*Note: If Next.js and Grafana are not running in the same Docker network, replace `bdc-grafana:3000` with your VM's IP address and Grafana's host port (e.g., `http://<VM_IP>:3010/monitor/:path*`).*
 
 ### Pre-loaded Dashboards
 The setup process installs two dashboard categories out of the box in Grafana:
