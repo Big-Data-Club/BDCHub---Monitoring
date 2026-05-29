@@ -32,10 +32,10 @@ services:
       - GF_USERS_ALLOW_SIGN_UP=false
       - GF_SERVER_DOMAIN=bdc.hpcc.vn
       - GF_SERVER_ROOT_URL=https://bdc.hpcc.vn/monitor/
-      - GF_SERVER_SERVE_FROM_SUB_PATH=true
+      - GF_SERVER_SERVE_FROM_SUB_PATH=false
       - GF_SECURITY_COOKIE_SECURE=true
       - GF_SECURITY_COOKIE_PATH=/
-      - GF_SECURITY_CSRF_TRUSTED_ORIGINS=https://bdc.hpcc.vn http://frontend:3000 http://bdc-grafana:3000 http://localhost:3010 http://127.0.0.1:3010 http://172.17.0.1:3010 http://localhost:3000
+      - GF_SECURITY_CSRF_TRUSTED_ORIGINS=bdc.hpcc.vn frontend:3000 bdc-grafana:3000 localhost:3010 127.0.0.1:3010 172.17.0.1:3010 localhost:3000
     ports:
       - "${GRAFANA_PORT:-3010}:3000"
     volumes:
