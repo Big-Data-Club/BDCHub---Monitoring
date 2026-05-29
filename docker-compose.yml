@@ -35,7 +35,7 @@ services:
       - GF_SERVER_SERVE_FROM_SUB_PATH=true
       - GF_SECURITY_COOKIE_SECURE=true
       - GF_SECURITY_COOKIE_PATH=/
-      - GF_SECURITY_CSRF_TRUSTED_ORIGINS=https://bdc.hpcc.vn
+      - GF_SECURITY_CSRF_TRUSTED_ORIGINS=https://bdc.hpcc.vn,http://bdc-grafana:3000,http://localhost:3010,http://127.0.0.1:3010,http://172.17.0.1:3010,http://localhost:3000
     ports:
       - "${GRAFANA_PORT:-3010}:3000"
     volumes:
