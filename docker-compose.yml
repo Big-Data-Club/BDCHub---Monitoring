@@ -33,6 +33,7 @@ services:
       - GF_SERVER_DOMAIN=bdc.hpcc.vn
       - GF_SERVER_ROOT_URL=https://bdc.hpcc.vn/monitor/
       - GF_SERVER_SERVE_FROM_SUB_PATH=true
+      - GF_SECURITY_COOKIE_SECURE=true
     ports:
       - "${GRAFANA_PORT:-3010}:3000"
     volumes:
