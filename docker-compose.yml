@@ -33,7 +33,7 @@ services:
       - GF_SERVER_DOMAIN=bdc.hpcc.vn
       - GF_SERVER_ROOT_URL=https://bdc.hpcc.vn/monitor/
       - GF_SERVER_SERVE_FROM_SUB_PATH=true
-      - GF_SECURITY_COOKIE_SECURE=true
+      - GF_SECURITY_COOKIE_SECURE=false
       - GF_SECURITY_CSRF_TRUSTED_ORIGINS=https://bdc.hpcc.vn
     ports:
       - "${GRAFANA_PORT:-3010}:3000"
@@ -45,7 +45,7 @@ services:
       - app-network
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.grafana.rule=Host(`monitor.bdc.hpcc.vn`)"
+      - "traefik.http.routers.grafana.rule=Host(`bdc.hpcc.vn`)"
       - "traefik.http.services.grafana.loadbalancer.server.port=3000"
     logging:
       driver: "json-file"
