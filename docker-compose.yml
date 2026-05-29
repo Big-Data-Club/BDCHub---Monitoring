@@ -34,6 +34,7 @@ services:
       - GF_SERVER_ROOT_URL=https://bdc.hpcc.vn/monitor/
       - GF_SERVER_SERVE_FROM_SUB_PATH=true
       - GF_SECURITY_COOKIE_SECURE=true
+      - GF_SECURITY_CSRF_TRUSTED_ORIGINS=https://bdc.hpcc.vn
     ports:
       - "${GRAFANA_PORT:-3010}:3000"
     volumes:
