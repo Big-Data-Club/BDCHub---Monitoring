@@ -46,7 +46,7 @@ services:
       - app-network
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.grafana.rule=Host(`bdc.hpcc.vn`)"
+      - "traefik.http.routers.grafana.rule=Host(`bdc.hpcc.vn`) && PathPrefix(`/monitor`)"
       - "traefik.http.services.grafana.loadbalancer.server.port=3000"
     logging:
       driver: "json-file"
@@ -103,5 +103,5 @@ volumes:
 
 networks:
   app-network:
-    name: ${COMPOSE_PROJECT_NAME:-bdcapp}_app-network
+    name: ${MONITOR_NETWORK_NAME:-app-network}
     external: true
