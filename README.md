@@ -37,11 +37,11 @@ graph TD
     AuthService -.->|Scrapes /actuator/prometheus| Prometheus
 
     %% Data Visualization
-    Prometheus —->|Query Data| Grafana
+    Prometheus -->|Query Data| Grafana
 
     %% User Traffic
-    User —->|HTTP request to bdc.hpcc.vn/monitor| Gateway / Next.js
-    Gateway / Next.js —->|Proxies to bdc-grafana:3000/monitor| Grafana
+    User -->|HTTP request to bdc.hpcc.vn/monitor| Gateway
+    Gateway -->|Proxies to bdc-grafana:3000/monitor| Grafana
 ```
 
 ---
