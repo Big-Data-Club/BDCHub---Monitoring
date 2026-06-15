@@ -76,7 +76,7 @@ services:
         max-file: "3"
 
   cadvisor:
-    image: gcr.io/cadvisor/cadvisor:v0.49.1
+    image: ghcr.io/google/cadvisor:v0.53.0
     container_name: bdc-cadvisor
     restart: unless-stopped
     privileged: true
