@@ -14,3 +14,8 @@ services:
       - AI_SERVICE_SECRET=${AI_SERVICE_SECRET:-ai-service-secret-change-me}
     # Default command (can be overridden during run)
     command: run k6_student_flow.js
+
+networks:
+  app-network:
+    name: ${MONITOR_NETWORK_NAME:-app-network}
+    external: true
