@@ -190,6 +190,44 @@ To add more permanent dashboards to Grafana:
 
 ---
 
+## ⚡ k6 Performance Testing Suite
+
+This repository contains the **BDC Performance Testing Suite** under the `./performance-tests/` directory. It enables standalone load, stress, spike, and soak testing of the BDC LMS microservices, with real-time metric streaming to Prometheus.
+
+### Structure
+- `performance-tests/docker-compose.k6.yml`: Docker Compose configuration for standalone k6 execution.
+- `performance-tests/k6_student_flow.js`: Student learning and interaction flow.
+- `performance-tests/k6_teacher_flow.js`: Teacher dashboard and editing flow.
+- `performance-tests/k6_admin_flow.js`: Admin lakehouse metrics and export flow.
+- `performance-tests/k6_multi_role_flow.js`: Combined multi-role workload.
+- `performance-tests/seed_users.sql` & `cleanup_users.sql`: SQL scripts to seed/cleanup test accounts.
+
+### Execution Guide
+
+#### Step 1: Seed the databases
+Run the respective sections of [seed_users.sql](./performance-tests/seed_users.sql) on the Auth (port `5433`) and LMS (port `5434`) databases.
+
+#### Step 2: Restart Prometheus to enable Remote Write
+Ensure Prometheus is running with remote write receiver enabled (configured by default in `docker-compose.yml`):
+```bash
+docker compose up -d --force-recreate prometheus
+```
+
+#### Step 3: Execute tests and push metrics
+Run k6 using Docker Compose, linking it to the internal network to push metrics:
+```bash
+# Run a Student Load Test
+docker compose -f performance-tests/docker-compose.k6.yml run --rm --network=app-network k6 run -o experimental-prometheus-rw=server-url=http://bdc-prometheus:9090/api/v1/write k6_student_flow.js
+
+# Run a Teacher Stress Test
+TEST_TYPE="stress" docker compose -f performance-tests/docker-compose.k6.yml run --rm --network=app-network k6 run -o experimental-prometheus-rw=server-url=http://bdc-prometheus:9090/api/v1/write k6_teacher_flow.js
+```
+
+#### Step 4: Monitor on Grafana
+Open Grafana (`https://bdc.hpcc.vn/monitor/` or port `3010`) and view the **k6 Performance Test Dashboard** (`k6-performance.json`) for live metrics.
+
+---
+
 ## 🔒 Security Best Practices
 
 1. **Change Default Credentials**: Never run the stack in production with default credentials. Set the `GRAFANA_ADMIN_PASSWORD` env variable to a secure string.

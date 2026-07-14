@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  k6:
+    image: grafana/k6:0.50.0
+    volumes:
+      - .:/io
+    working_dir: /io
+    environment:
+      - TEST_TYPE=${TEST_TYPE:-load}
+      - BASE_URL=${BASE_URL:-http://host.docker.internal:3000}
+      - COURSE_ID=${COURSE_ID:-19}
+      - NODE_ID=${NODE_ID:-2221}
+      - AI_SERVICE_SECRET=${AI_SERVICE_SECRET:-ai-service-secret-change-me}
+    # Default command (can be overridden during run)
+    command: run k6_student_flow.js
