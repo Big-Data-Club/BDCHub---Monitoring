@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   k6:
-    image: grafana/k6:0.50.0
+    image: grafana/k6:latest
     volumes:
       - .:/io
     working_dir: /io
